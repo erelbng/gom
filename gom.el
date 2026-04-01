@@ -1,6 +1,6 @@
 ;;; gom.el --- Git-Org-Manager: Syncing Org-mode with Git forges -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026 Eric Elbing
+;; Copyright (C) 2026 Eric Plaß
 ;; Author: Eric Plaß
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1") (org "9.0"))
