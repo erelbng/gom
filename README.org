@@ -1,0 +1,82 @@
+#+TITLE: GOM: Git-Org-Manager
+#+AUTHOR: Eric Plaß
+#+DATE: 2026-04-01
+#+DESCRIPTION: A lightweight bridge between Org-mode and Git forges (GitHub, GitLab, Gitea) with native time-tracking support.
+
+*GOM* (Git-Org-Manager) is an Emacs package designed for developers who live in *Org-mode* but work on *Git forges*. 
+
+Unlike heavier alternatives, GOM focuses on a simple, text-centric workflow:
+1. *Pull* all your assigned issues into a single, beautiful Org file.
+2. *Clock* your time locally using standard =org-clock-in= and =org-clock-out=.
+3. *Draft* replies directly under the issue headings.
+4. *Push* your comments and your recorded time (via =/spend=) back to the server in one command.
+
+* Features
+- *Unified Inbox:* Sync issues from GitHub, GitLab, and Gitea into one file.
+- *Native Time Tracking:* Automatically converts Org =LOGBOOK= entries into GitLab/Gitea =/spend= commands.
+- *Clean Interface:* Issue conversations are formatted with readable headers, avoiding property drawer clutter.
+- *Assignee Integration:* Assignees are automatically mapped to Org tags for easy filtering (=C-c a m=).
+- *Interactive Dashboard:* A central hub to manage your tracked repositories and navigate your projects.
+- *Safety First:* Local logbooks are cleared only after a successful push to prevent double-billing time.
+
+* Installation
+*GOM* relies on official CLI tools to communicate with forges. Ensure you have the following installed and authenticated, depending with what hosting provider you work:
+- [[https://cli.github.com/][gh]] (GitHub)
+- [[https://glab.readthedocs.io/][glab]] (GitLab)
+- [[https://gitea.com/gitea/tea][tea]] (Gitea)
+
+Authenticating with these providers is fairly simple:
+#+BEGIN_SRC shell :noeval
+  gh auth login
+  glab auth login --hostname gitlab.mycompany.com
+  glab auth login --hostname git.home-lab.io
+  tea login add
+#+END_SRC
+
+** Manual Installation
+Clone this repository and add it to your load path:
+
+#+BEGIN_SRC emacs-lisp :noeval
+(add-to-list 'load-path "/path/to/gom.el")
+(require 'gom)
+#+END_SRC
+
+* Configuration
+Set up your repository directory and map your domains to their respective platforms:
+
+#+BEGIN_SRC emacs-lisp :noeval
+(setq gom-repos-directory "~/folder-containing-repos")
+(setq gom-issues-file "~/Documents/issues.org")
+
+(setq gom-git-platform-mapping
+      '(("github.com" . github)
+        ("gitlab.your-domain.de" . gitlab)
+        ("gitea.your-domain.de" . gitea)))
+#+END_SRC
+
+* Usage
+** The Dashboard
+Run =M-x gom-dashboard= to see an overview of your projects. You can click on paths or repository names to navigate your filesystem instantly.
+
+** Syncing Issues
+Run =M-x gom-sync= to fetch all open issues. 
+- Assignees appear as *Tags*.
+- Total time spent on the server is stored in the =:REMOTE_TIME:= property.
+- Previous comments are formatted as sub-headings.
+
+** Pushing Updates
+1. Navigate to an issue in your =issues.org= file.
+2. Clock some time into a specific issue using =org-clock-in= under the =*** Draft Reply= heading.
+3. Type your reply under the =*** Draft Reply= heading.
+4. Run =M-x gom-push= under the =*** Draft Reply= heading.
+
+GOM will:
+- Send your comment.
+- Send a =/spend= command with your accumulated local time.
+- Clear your local =LOGBOOK= so you're ready for the next session.
+
+* Disclaimer
+Currently only tested with gitlab
+
+* License
+TODO
